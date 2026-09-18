@@ -1,4 +1,4 @@
-import type { JwtTokenPayload } from '../types/jwt-payload.type.js';
+import type { JwtTokenPayloadWithRefresh } from '../types/jwt-payload.type.js';
 import { Injectable } from '@nestjs/common';
 import { TokenExpiredError } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
@@ -7,7 +7,7 @@ import { RefreshTokenInvalidException } from '../exceptions/refresh-token-invali
 
 @Injectable()
 export class RefreshTokenGuard extends AuthGuard('jwt-refresh') {
-    override handleRequest<TUser = JwtTokenPayload>(
+    override handleRequest<TUser = JwtTokenPayloadWithRefresh>(
         err: any,
         user: TUser,
         info: any

@@ -1,6 +1,6 @@
 import type { Response } from 'express';
 import type { EnvConfig } from '#/config/env.js';
-import type { JwtTokenPayload } from './types/jwt-payload.type.js';
+import type { JwtTokenPayloadWithRefresh } from './types/jwt-payload.type.js';
 import {
     Body,
     Controller,
@@ -57,7 +57,7 @@ export class AuthController {
     @UseGuards(RefreshTokenGuard)
     @Post('/refresh')
     public async refresh(
-        @CurrentUser() payload: JwtTokenPayload,
+        @CurrentUser() payload: JwtTokenPayloadWithRefresh,
         @Res({ passthrough: true }) response: Response
     ) {
         try {

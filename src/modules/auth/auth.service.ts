@@ -1,7 +1,10 @@
 import type { DataSource, EntityManager } from 'typeorm';
 import type { EnvConfig } from '#/config/env.js';
 import type { CreateUserInput } from '../users/user.service.js';
-import type { JwtTokenPayload } from './types/jwt-payload.type.js';
+import type {
+    JwtTokenPayload,
+    JwtTokenPayloadWithRefresh
+} from './types/jwt-payload.type.js';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -55,14 +58,18 @@ export class AuthService {
         });
     }
 
-    public async refresh(payload: JwtTokenPayload) {
+    public async refresh(payload: JwtTokenPayloadWithRefresh) {
         if (!(await this.userService.exists({ id: payload.uid })))
             throw new RefreshTokenInvalidException();
 
         return this.dataSource.transaction(async (manager) => {
             const { affected } = await manager.update(
                 RefreshTokenEntity,
-                { sessionId: payload.sid, revoked: false },
+                {
+                    sessionId: payload.sid,
+                    token: this.sha256(payload.refreshToken),
+                    revoked: false
+                },
                 { revoked: true }
             );
             if (affected === 0) {
@@ -121,9 +128,13 @@ export class AuthService {
         });
 
         return {
-            hashedRefreshToken: createHash('sha256').update(refreshToken).digest('hex'),
+            hashedRefreshToken: this.sha256(refreshToken),
             refreshToken,
             accessToken
         };
+    }
+
+    private sha256(str: string) {
+        return createHash('sha256').update(str).digest('hex');
     }
 }

@@ -1,6 +1,9 @@
 import type { Request } from 'express';
 import type { EnvConfig } from '#/config/env.js';
-import type { JwtTokenPayload } from '../types/jwt-payload.type.js';
+import type {
+    JwtTokenPayload,
+    JwtTokenPayloadWithRefresh
+} from '../types/jwt-payload.type.js';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
@@ -26,7 +29,10 @@ export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refres
         });
     }
 
-    override validate(req: Request, payload: JwtTokenPayload) {
+    override validate(
+        req: Request,
+        payload: JwtTokenPayload
+    ): JwtTokenPayloadWithRefresh {
         const refreshToken = refreshTokenfromCookie(req) as string;
         return { ...payload, refreshToken };
     }
