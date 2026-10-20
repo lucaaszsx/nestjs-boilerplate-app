@@ -1,6 +1,6 @@
 import type { Relation } from 'typeorm';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { BaseEntity } from '#/database/base.entity.js';
+import { BaseEntity } from '#/common/database/base.entity.js';
 import { SessionEntity } from './session.entity.js';
 
 @Entity('refresh_tokens')

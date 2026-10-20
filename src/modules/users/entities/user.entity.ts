@@ -1,7 +1,7 @@
 import type { Relation } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { BeforeInsert, Column, Entity, OneToMany } from 'typeorm';
-import { BaseEntity } from '#/database/base.entity.js';
+import { BaseEntity } from '#/common/database/base.entity.js';
 import { SessionEntity } from '../../auth/entities/session.entity.js';
 
 const BCRYPT_SALT = 12;
