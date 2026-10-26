@@ -31,7 +31,7 @@ const envConfig = () => ({
 
     db: {
         host: getEnvVar('PG_HOST'),
-        port: parseInt(getEnvVar('PG_HOST'), 10),
+        port: parseInt(getEnvVar('PG_PORT'), 10),
         user: getEnvVar('PG_USER'),
         pass: getEnvVar('PG_PASS'),
         dbName: getEnvVar('PG_DBNAME')
